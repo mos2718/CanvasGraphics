@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+   
+</head>
+<body >
+ <p>
+      <input id="Button1"  type="button"   value="InvertColor"  onclick="invert()" /> <br>
+	  <input id="Button2"  type="button"   value="InvertColor"  onclick="Button1_onclick()" />
+</p>
+<canvas id="canvas" width="1024" height="768" />  
+
+<script type="text/javascript" >
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+
+  var img = new Image();
+  img.src = '0.jpg';
+  
+  img.onload = function() {  
+  ctx.drawImage(img, 0, 0);
+ // draw(this); 
+   };
+  function invert() {
+  alert("aaa");
+  var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  var data = imageData.data; 
+    for (var i = 0; i < data.length; i += 4) {
+      data[i]     = 255 - data[i];     // red
+      data[i + 1] = 255 - data[i + 1]; // green
+      data[i + 2] = 255 - data[i + 2]; // blue
+    }
+    ctx.putImageData(imageData, 0, 0);
+  };  
+   
+/*
+function draw(img) {
+
+  ctx.drawImage(img, 0, 0);
+  img.style.display = 'none';
+ 
+} */
+
+</script> 
+
+
+</body>
+</html>
