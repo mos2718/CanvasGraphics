@@ -4,11 +4,47 @@
     <title></title>
 </head>
 <body>
-<canvas id="canvas1" width="1024" height="768"  style="background: url('4.jpg')" />  
+<p>
+ <input id="Button1"  type="button"   value="InvertColor"  onclick="invert()" /> <br>
+ <input id="Button2"  type="button"   value="InvertColor"  onclick="Button1_onclick()" />
+</p>
+<canvas id="c1" width="1024" height="768" />  
+
 <script type="text/javascript" >
-    var canvas = document.getElementById("canvas1");
+
+ // <canvas id="c1" width="1024" height="768"  style="background: url('4.jpg')" />  
+    var canvas = document.getElementById("c1");
     var ctx = canvas.getContext('2d');
- 
+	
+	var image = new Image();
+    image.onload = function () {
+        ctx.drawImage(image, 0, 0);
+    }; 
+    image.src = "0.jpg";
+
+ function Button1_onclick() {
+           imagedata = ctx.getImageData(0, 0, image.width, image.height);
+           var n = imagedata.data.length;
+           for (var i = 0; i < n; i += 4) {
+               imagedata.data[i + 0] = imagedata.data[i + 0] * 0.8; // red
+               imagedata.data[i + 1] = imagedata.data[i + 1] * 0.8; // green
+               imagedata.data[i + 2] = imagedata.data[i + 2] * 0.8; // blue
+           }
+           ctx.putImageData(imagedata, 0, 0);
+       }
+
+
+  function invert() {
+           imagedata = ctx.getImageData(0, 0, image.width, image.height);
+           var n = imagedata.data.length;
+           for (var i = 0; i < n; i += 4) {
+               imagedata.data[i + 0] = 255- imagedata.data[i + 0]; // red
+               imagedata.data[i + 1] = 255- imagedata.data[i + 1]; // green
+               imagedata.data[i + 2] = 255- imagedata.data[i + 2]; // blue
+           }
+           ctx.putImageData(imagedata, 0, 0);
+  };  
+   
 </script> 
 
 
