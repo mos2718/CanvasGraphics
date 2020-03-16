@@ -8,20 +8,20 @@
  <input id="Button1"  type="button"   value="InvertColor"  onclick="invert()" /> <br>
  <input id="Button2"  type="button"   value="InvertColor"  onclick="Button1_onclick()" />
 </p>
-<canvas id="c1" width="1024" height="768" />  
 
+<canvas id="c1" width="1024" height="768"  style="background: url('4.jpg')" />  
 <script type="text/javascript" >
-
+//<canvas id="c1" width="1024" height="768" />  
  // <canvas id="c1" width="1024" height="768"  style="background: url('4.jpg')" />  
     var canvas = document.getElementById("c1");
     var ctx = canvas.getContext('2d');
 	
-	var image = new Image();
+	/*var image = new Image();
     image.onload = function () {
         ctx.drawImage(image, 0, 0);
     }; 
     image.src = "0.jpg";
-
+   */
  function Button1_onclick() {
            imagedata = ctx.getImageData(0, 0, image.width, image.height);
            var n = imagedata.data.length;

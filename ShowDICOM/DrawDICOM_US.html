@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+<canvas id="myCanvas" width="300" height="200" style="border:1px solid #d3d3d3;"></canvas>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button onclick="setPixel()" style="height: 67px; width: 192px">Set pixel data</button> </p>
+<script>
+    // DICOM 影像參數 ，從 image pixel module 取得
+    var imgMetaData = { rows: 480, columns: 640, storedBytes: 1, samplesPerPixel: 3, pixelDataOffset: 1118 };
+    // Load DICOM image binary data
+    //  http://stackoverflow.com/questions/14446447/javascript-read-local-text-file
+    var xhttp = new XMLHttpRequest(); //W3C標準  可容易地從URL取得資料而不用刷新頁面
+    var dicomData
+    xhttp.open('GET', "imgDir/US1.dcm", true);
+    xhttp.responseType = "arraybuffer"; //取得或設定實際回應類型
+    xhttp.onreadystatechange = function () { 
+        if (xhttp.readyState == 4)  //0 (還沒開始)  1 (讀取中)  2 (已讀取)  3 (資訊交換中)  4 (一切完成)        
+            dicomData = new DataView(xhttp.response);     // 以 DataView 取得回應之 DICOM data object   
+    }
+    xhttp.send();
+    var c = document.getElementById("myCanvas");
+    c.width = imgMetaData.columns;
+    c.height = imgMetaData.rows;
+    var ctx = c.getContext("2d");
+    function setPixel() {
+        // Create an ImageData object
+        var imageData = ctx.getImageData(0, 0, c.width, c.height);
+        for (var x = 0; x < c.width; x++) {
+            for (var y = 0; y < c.height; y++) {
+                // Get DICOM image pixel index
+                var dicomPixelIndex = (y * c.width + x) * imgMetaData.samplesPerPixel * imgMetaData.storedBytes + imgMetaData.pixelDataOffset;
+                // Get the canvas pixel +  index
+                var canvasPixelIndex = (y * c.width + x) * 4;
+                //dicomData.getInt8  references to JS dataView and arrayBuffer  http://www.javascripture.com/ArrayBuffer
+                imageData.data[canvasPixelIndex] = dicomData.getUint8(dicomPixelIndex);     // Red
+                imageData.data[canvasPixelIndex + 1] = dicomData.getUint8(dicomPixelIndex +1); // Green
+                imageData.data[canvasPixelIndex + 2] = dicomData.getUint8(dicomPixelIndex +2);  // Blue
+                imageData.data[canvasPixelIndex + 3] =255;   // Alpha
+            }
+        }
+        ctx.putImageData(imageData, 0, 0); //,300,200, width, height);
+    }
+</script>
+</body>
+</html>
